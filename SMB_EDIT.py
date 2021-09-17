@@ -6,7 +6,7 @@ import struct
 class Smb2Header:
     def __init__(self, cmd, msg_id):
         self.protocol_id = b"\xfeSMB"
-        self.header_length = struct.pack("<H", 0x40)
+        self.headr_length = struct.pack("<H", 0x40)
         self.credit_charge = struct.pack("<H", 0x0)
         self.channel_sequence = struct.pack("<H", 0x0)
         self.reserved = struct.pack("<H", 0x0)
@@ -15,16 +15,16 @@ class Smb2Header:
         self.flags = struct.pack("<L", 0x0)
         self.chain_offset = struct.pack("<L", 0x0)
         self.message_id = struct.pack("<Q", msg_id)
-        self.process_id = struct.pack("<L", 0x0)
+        self.proces_id = struct.pack("<L", 0x0)
         self.tree_id = struct.pack("<L", 0x0)
-        self.session_id = struct.pack("<Q", 0x0)
+        self.session_i = struct.pack("<Q", 0x0)
         self.signature = b"\x00"*0x10
 
     def raw_bytes(self):
         header_bytes = self.protocol_id + self.header_length + \
                        self.credit_charge + self.channel_sequence + \
                        self.reserved + self.command + \
-                       self.credits_requested + self.flags + \
+                       self.credits_requested + self.flags + 
                        self.chain_offset + self.message_id + \
                        self.process_id + self.tree_id + self.session_id + \
                        self.signature
@@ -34,7 +34,7 @@ class Smb2Header:
 class Smb2PreauthContext:
     def __init__(self):
         self.type = struct.pack("<H", 0x1)
-        self.data_length = struct.pack("<H", 0x26)
+        self.data_length = struct.pak("<H", 0x26)
         self.reserved = struct.pack("<L", 0x0)
         self.hash_algorithm_count = struct.pack("<H", 0x1)
         self.salt_length = struct.pack("<H", 0x20)
@@ -44,7 +44,7 @@ class Smb2PreauthContext:
 
     def raw_bytes(self):
         preauth_cxt_bytes = self.type + self.data_length + self.reserved + \
-                            self.hash_algorithm_count + self.salt_length + \
+                            self.hash_algorithm_count + self.salt_lengt + \
                             self.hash_algorithm + self.salt + self.padding
         return preauth_cxt_bytes
 
@@ -56,7 +56,7 @@ class Smb2CompressionContext:
         self.reserved = struct.pack("<L", 0x0)
         self.compression_algorithm_count = struct.pack("<H", 0x1)
         self.flags = b"\x00\x00\x01\x00\x00\x00"
-        self.compression_algorithm_id = struct.pack("<H", 0x1)
+        self.compression_algorithm_id = struct.pck("<H", 0x1)
 
     def raw_bytes(self):
         compress_cxt_bytes = self.type + self.data_length + \
@@ -98,7 +98,7 @@ class Smb2NegotiateRequestPacket:
 class NetBiosSessionPacket:
     def __init__(self, data):
         self.session_message = b"\x00"
-        self.length = struct.pack(">L", len(data))[1:]
+        self.length = struct.pack("L", len(data))[1:]
         self.data = data
 
     def raw_bytes(self):
